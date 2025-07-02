@@ -5,6 +5,7 @@ import api.BookRequests;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import helpers.Attach;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.selenide.AllureSelenide;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.AfterEach;
@@ -23,11 +24,15 @@ public class BaseTest {
     @BeforeAll
     static void setUp() {
         // Browser config
+        WebDriverManager.chromedriver().setup();
+
+        Configuration.headless = true;
+        Configuration.browser = "chrome";
         Configuration.browserSize = "1920x1080";
         Configuration.pageLoadStrategy = "eager";
         Configuration.baseUrl = "https://demoqa.com";
-        Configuration.headless = true;
-        Configuration.browser = "chrome";
+
+
 
         // Selenoid config
         String SELENOID_URL = System.getProperty("selenoid.url");

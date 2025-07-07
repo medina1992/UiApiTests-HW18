@@ -45,8 +45,7 @@ public class BaseTest {
             throw new RuntimeException("SELENOID_URL is not provided. Use -Dselenoid.url=...");
         }
 
-        Configuration.remote = String.format("https://%s:%s@%s/wd/hub",
-                SELENOID_LOGIN, SELENOID_PASSWORD, SELENOID_URL);
+        Configuration.remote = String.format("http://%s/wd/hub", SELENOID_URL);
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("selenoid:options", Map.of(

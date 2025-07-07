@@ -9,7 +9,7 @@ import helpers.WithLogin;
 
 import static io.qameta.allure.Allure.step;
 
-public class DeleteBookTests extends tests.BaseTest {
+public class DeleteBookTests extends BaseTest {
 
     @Test
     @WithLogin

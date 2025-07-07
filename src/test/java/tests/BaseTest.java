@@ -1,6 +1,5 @@
 package tests;
 
-
 import api.BookRequests;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -22,36 +21,41 @@ public class BaseTest {
 
     @BeforeAll
     static void setUp() {
-        // Browser config
-        String browserVersion = System.getProperty("BROWSER_VERSION");
-        if (browserVersion == null || browserVersion.isEmpty()) {
-            browserVersion = "137.0"; // версия по умолчанию
-        }
+        // === Print system props for debug ===
+        System.out.println("=== CONFIG CHECK ===");
+        System.out.println("Selenoid URL: " + System.getProperty("selenoid.url"));
+        System.out.println("Login: " + System.getProperty("selenoid.login"));
+        System.out.println("Password: " + System.getProperty("selenoid.password"));
+        System.out.println("Browser version: " + System.getProperty("BROWSER_VERSION"));
 
+        // Browser config
+        String browserVersion = System.getProperty("BROWSER_VERSION", "137.0");
         Configuration.browser = "chrome";
-        Configuration.browserVersion = browserVersion;     // <-- Добавить эту строку
+        Configuration.browserVersion = browserVersion;
         Configuration.browserSize = "1920x1080";
         Configuration.pageLoadStrategy = "eager";
         Configuration.baseUrl = "https://demoqa.com";
-
-
 
         // Selenoid config
         String SELENOID_URL = System.getProperty("selenoid.url");
         String SELENOID_LOGIN = System.getProperty("selenoid.login");
         String SELENOID_PASSWORD = System.getProperty("selenoid.password");
-        if (SELENOID_URL != null) {
-            Configuration.remote = String.format("https://%s:%s@%s/wd/hub",
-                    SELENOID_LOGIN, SELENOID_PASSWORD, SELENOID_URL);
-            DesiredCapabilities capabilities = new DesiredCapabilities();
-            capabilities.setCapability("selenoid:options", Map.of(
-                    "enableVNC", true,
-                    "enableVideo", true
-            ));
-            Configuration.browserCapabilities = capabilities;
+
+        if (SELENOID_URL == null || SELENOID_URL.isBlank()) {
+            throw new RuntimeException("SELENOID_URL is not provided. Use -Dselenoid.url=...");
         }
 
-        // RestAssured config
+        Configuration.remote = String.format("https://%s:%s@%s/wd/hub",
+                SELENOID_LOGIN, SELENOID_PASSWORD, SELENOID_URL);
+
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability("selenoid:options", Map.of(
+                "enableVNC", true,
+                "enableVideo", true
+        ));
+        Configuration.browserCapabilities = capabilities;
+
+        // API config
         RestAssured.baseURI = "https://demoqa.com";
     }
 
@@ -67,5 +71,4 @@ public class BaseTest {
         Attach.browserConsoleLogs();
         Attach.addVideo();
     }
-
 }

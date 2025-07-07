@@ -29,7 +29,7 @@ public class BaseTest {
         System.out.println("Browser version: " + System.getProperty("BROWSER_VERSION"));
 
         // Browser config
-        String browserVersion = System.getProperty("BROWSER_VERSION", "137.0");
+        String browserVersion = System.getProperty("BROWSER_VERSION", "128.0");
         Configuration.browser = "chrome";
         Configuration.browserVersion = browserVersion;
         Configuration.browserSize = "1920x1080";

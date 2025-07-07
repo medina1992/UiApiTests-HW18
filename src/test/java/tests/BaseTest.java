@@ -29,23 +29,21 @@ public class BaseTest {
         System.out.println("Browser version: " + System.getProperty("BROWSER_VERSION"));
 
         // Browser config
-        String browserVersion = System.getProperty("BROWSER_VERSION", "128.0");
+        String browserVersion = System.getProperty("BROWSER_VERSION", "137.0");
         Configuration.browser = "chrome";
         Configuration.browserVersion = browserVersion;
         Configuration.browserSize = "1920x1080";
         Configuration.pageLoadStrategy = "eager";
         Configuration.baseUrl = "https://demoqa.com";
 
-        // Selenoid config
+        //Selenoid config
         String SELENOID_URL = System.getProperty("selenoid.url");
-        String SELENOID_LOGIN = System.getProperty("selenoid.login");
-        String SELENOID_PASSWORD = System.getProperty("selenoid.password");
 
-        if (SELENOID_URL == null || SELENOID_URL.isBlank()) {
-            throw new RuntimeException("SELENOID_URL is not provided. Use -Dselenoid.url=...");
+        if (SELENOID_URL != null && !SELENOID_URL.isBlank()) {
+
+            Configuration.remote = String.format("http://%s/wd/hub", SELENOID_URL);
         }
 
-        Configuration.remote = String.format("http://%s/wd/hub", SELENOID_URL);
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("selenoid:options", Map.of(

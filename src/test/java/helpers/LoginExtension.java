@@ -1,8 +1,6 @@
 package helpers;
 
 import api.AuthorizationRequests;
-import com.fasterxml.jackson.core.TreeNode;
-import com.github.fge.jackson.jsonpointer.TokenResolver;
 import models.LoginResponseModel;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -14,13 +12,14 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class LoginExtension implements BeforeEachCallback {
 
-
-
-
     @Override
     public void beforeEach(ExtensionContext context) {
         LoginResponseModel loginResponse = AuthorizationRequests.login(TestData.credentials);
 
+        boolean isTokenValid = AuthorizationRequests.checkToken(loginResponse.getToken(), loginResponse.getUserId());
+        if (!isTokenValid) {
+            loginResponse = AuthorizationRequests.login(TestData.credentials); // пере-логин
+        }
         open("/favicon.ico");
         getWebDriver().manage().addCookie(new Cookie("userID", loginResponse.getUserId()));
         getWebDriver().manage().addCookie(new Cookie("token", loginResponse.getToken()));

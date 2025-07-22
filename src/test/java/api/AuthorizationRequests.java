@@ -18,4 +18,12 @@ public class AuthorizationRequests {
                 .spec(responseSpec(200))
                 .extract().as(LoginResponseModel.class);
     }
+    public static boolean checkToken(String token, String userId) {
+        return given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("/Account/v1/User/" + userId)
+                .then()
+                .extract().statusCode() != 401;
+    }
 }

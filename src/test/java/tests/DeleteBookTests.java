@@ -4,9 +4,7 @@ import models.AddBookModel;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import helpers.WithLogin;
-
 import static io.qameta.allure.Allure.step;
 
 public class DeleteBookTests extends BaseTest {
